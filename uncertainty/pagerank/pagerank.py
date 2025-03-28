@@ -109,24 +109,26 @@ def iterate_pagerank(corpus, damping_factor):
     their estimated PageRank value (a value between 0 and 1). All
     PageRank values should sum to 1.
     """
-    dictionary = dict()
-    for key in corpus:
-        dictionary[key] = 1/len(corpus)
+    ranks = {page: 1 / len(corpus) for page in corpus}
+
     while True:
-        new_dictionary = dict()
-        for key in dictionary:
-            new_dictionary[key] = (1 - damping_factor) / len(corpus)
-        for key in dictionary:
-            for key2 in corpus:
-                if key in corpus[key2]:
-                    new_dictionary[key] += damping_factor * dictionary[key2] / len(corpus[key2])
-        sum = 0
-        for key in new_dictionary:
-            sum += abs(new_dictionary[key] - dictionary[key])
-        if sum < 0.001:
-            return new_dictionary
-        else:
-            dictionary = new_dictionary
+        new_ranks = {}
+        for page in corpus:
+            new_rank = (1 - damping_factor) / len(corpus)
+            # Sum contributions from all pages in the corpus
+            for possible_page in corpus:
+                # If possible_page has no links, treat it as linking to all pages
+                if not corpus[possible_page]:
+                    new_rank += damping_factor * ranks[possible_page] / len(corpus)
+                # Otherwise, if possible_page links to the current page, add its contribution
+                elif page in corpus[possible_page]:
+                    new_rank += damping_factor * ranks[possible_page] / len(corpus[possible_page])
+            new_ranks[page] = new_rank
+
+        # Check convergence: if no PageRank value changes by more than 0.001, return new_ranks
+        if all(abs(new_ranks[page] - ranks[page]) < 0.001 for page in corpus):
+            return new_ranks
+        ranks = new_ranks
 
 
 if __name__ == "__main__":

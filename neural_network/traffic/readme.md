@@ -1,0 +1,9 @@
+# Traffic Sign Recognition Project
+
+## Experimentation Process
+
+During the development of this project, I experimented with various convolutional neural network (CNN) architectures to achieve a balance between accuracy and model complexity for traffic sign recognition. Initially, I started with a simple CNN that consisted of one convolutional layer followed by a max-pooling layer and a single dense layer. This simple model, however, suffered from underfitting: it was not complex enough to capture the nuances in the traffic sign images, which led to lower accuracy on the validation set.
+
+To address this, I incrementally increased the network’s depth by adding an extra convolutional and pooling layer. I experimented with different filter sizes (e.g., 32 filters in the first layer and 64 in the second) and kernel sizes of (3,3), which provided a good trade-off between capturing fine details and reducing computational cost. I also introduced a dropout layer (with a rate of 0.5) after the dense layer to help reduce overfitting by preventing the model from relying too heavily on any particular feature. These changes improved the model’s ability to generalize to unseen data, resulting in a noticeable improvement in performance. 
+
+Throughout this process, I observed that a more complex network was beneficial up to a point—beyond which the model started to overfit the training data. Fine-tuning parameters such as the number of filters, the depth of the network, and the dropout rate was crucial. In conclusion, the final architecture featuring two convolutional-pooling pairs, a dropout layer, and a dense layer with 128 neurons offered a well-balanced solution, yielding robust performance on the test set. Future improvements might include exploring batch normalization and data augmentation to further enhance the model's accuracy and generalization.
